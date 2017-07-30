@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Login Page</title>
+    <link rel="stylesheet" href="/css/style.css"/>
+</head>
+<body>
+    <div class="title">
+        <p>Welcome To Our Awesome Chat!</p>
+    </div>
+    <div class="page">
+        <p>Please, log in</p>
+        <form class="login-form" action="authorize" method="post">
+            <input placeholder="first name" required=""/>
+            <input placeholder="last name" required=""/>
+            <input type="password" placeholder="password" required=""/>
+            <button>login</button>
+            <p class="message">Not registered? <a href="register">Create an account</a></p>
+        </form>
+    </div>
+</body>
+</html>
