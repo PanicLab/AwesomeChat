@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8"/>
     <title>Register Page</title>
-    <link rel="stylesheet" href="/css/style.css"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
 </head>
 <body>
     <div class="form">
@@ -12,7 +12,7 @@
             <input placeholder="last name" required=""/>
             <input type="password" placeholder="password" required=""/>
             <button>create account</button>
-            <p class="message">Already registered? <a href="login">Sign In</a></p>
+            <p class="message">Already registered? <a th:href="@{login}">Sign In</a></p>
         </form>
     </div>
 
