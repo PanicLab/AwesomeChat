@@ -23,10 +23,7 @@ public class AuthorizeController {
     ServletCxtListener cxtListener;
 
     @RequestMapping(value = "/authorize", method = RequestMethod.POST)
-    public ModelAndView authorize(HttpServletRequest request, Model model, RedirectAttributes redirectAttrs) {
-        final String LOGIN_ERROR_MESSAGE = "This is login error message";
-        model.addAttribute("xxxx", LOGIN_ERROR_MESSAGE);
-        redirectAttrs.addAttribute("xxxx", LOGIN_ERROR_MESSAGE);
+    public ModelAndView authorize() {
 
         return new ModelAndView("redirect:/error_page");
     }
