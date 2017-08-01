@@ -12,9 +12,9 @@
     <div class="page">
         <p>Please, log in</p>
         <form class="login-form" action="authorize" method="post">
-            <input placeholder="first name" required=""/>
-            <input placeholder="last name" required=""/>
-            <input type="password" placeholder="password" required=""/>
+            <input name="firstName" placeholder="first name" required=""/>
+            <input name="lastName" placeholder="last name" required=""/>
+            <input name="password" type="password" placeholder="password" required=""/>
             <button>login</button>
             <p class="message">Not registered? <a th:href="@{register}">Create an account</a></p>
         </form>
