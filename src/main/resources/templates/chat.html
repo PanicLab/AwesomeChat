@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat</title>
+    <link rel="stylesheet" type="text/css" href="/static/chat_style.css"/>
+</head>
+<body>
+    <h1>Awesome Chat</h1>
+    <div>
+        <textarea id="textarea" cols="70" rows="20" readonly></textarea>
+        <textarea id="userlist" cols="20" rows="20" readonly></textarea>
+    </div>
+    <div>
+<!--        <textarea id="input" cols="70" rows="1" onkeyup="sendMessage(event);"></textarea><br/>-->
+        Your message: <input type="text" size="71" maxlength="71" onkeyup="sendMessage(event);"/>
+        <input type="submit" id="send" value="Send!" onclick="sendMessage(event);"/><br/>
+    </div>
+    <br/><br/><br/>
+
+</body>
+</html>

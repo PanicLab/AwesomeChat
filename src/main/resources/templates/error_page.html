@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
     <title>error page</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/static/style.css}"/>
 </head>
 <body>
     <div class="title">
@@ -12,11 +12,11 @@
     <div class="error_message">
         <!-- Thymeleaf is not used due to intellij idea's errors in it:
             <p> <span th:text="${message}">error message</span> </p>
-        So, two html error pages is just a workaround.
+        So, this html error pages is just a workaround.
         -->
         <p>Authorization Error</p>
         <p>Your login &amp; password is invalid or user is already exist</p>
-        <p class="message">Please, <a th:href="@{login}">try again</a> or <a th:href="@{register}">register</a> </p>
+        <p class="message">Please, <a th:href="@{login}">try again</a> or <a th:href="@{register}">create an account</a> </p>
     </div>
 </body>
 </html>
