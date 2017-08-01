@@ -1,8 +1,9 @@
 package com.github.awesomechat.chat.config;
 
 import com.github.awesomechat.chat.ServletCxtListener;
-import org.springframework.boot.web.servlet.ServletComponentScan;
+
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -14,7 +15,7 @@ import javax.servlet.ServletContextListener;
 
 @Configuration
 @EnableWebMvc
-@ServletComponentScan
+@ComponentScan("com.github.awesomechat.chat")
 public class WebConfig extends WebMvcConfigurerAdapter {
     private static final String[] CLASSPATH_RESOURCE_LOCATIONS = {
             "classpath:/META-INF/resources/", "classpath:/resources/",
