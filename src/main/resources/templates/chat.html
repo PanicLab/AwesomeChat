@@ -7,10 +7,17 @@
 </head>
 <body>
     <h1>Awesome Chat</h1>
-    <div>
-        <textarea id="textarea" cols="70" rows="20" readonly="readonly"></textarea>
-        <textarea id="userlist" cols="20" rows="20" readonly="readonly"></textarea>
+    <div style="position: relative; display: inline-block">
+        <span>
+            <div style="position: relative; display: inline-block">
+                <textarea id="textarea" cols="70" rows="20" readonly="readonly" ></textarea>
+            </div>
+            <div style="position: relative; display: inline-block">
+                <textarea id="userlist" cols="20" rows="20" readonly="readonly"></textarea>
+            </div>
+        </span>
     </div>
+
     <div>
 <!--        <textarea id="input" cols="70" rows="1" onkeyup="sendMessage(event);"></textarea><br/>-->
         Your message: <input type="text" size="71" maxlength="71" onkeyup="sendMessage(event);"/>
