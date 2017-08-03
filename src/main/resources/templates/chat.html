@@ -18,28 +18,16 @@
         }
 
         function onOpen() {
-            var date = new Date();
-            var hour = date.getHours();
-            var min = date.getMinutes();
-            var sec = date.getSeconds();
             console.log(getTime() + "Info: WebSocket connection opened.");
             //ws.send("Welcome!");
         }
 
         function onClose() {
             setTimeout(connect, 1000);
-            var date = new Date();
-            var hour = date.getHours();
-            var min = date.getMinutes();
-            var sec = date.getSeconds();
             console.log(getTime() + "Info: WebSocket closed.");
         }
 
         function onMessage(message) {
-            var date = new Date();
-            var hour = date.getHours();
-            var min = date.getMinutes();
-            var sec = date.getSeconds();
             console.log(getTime() + "Message detected: " + message.data );
             //ws.send(message.data);
         }
