@@ -20,7 +20,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 
 @Controller
-public class WebSocketController extends TextWebSocketHandler {
+public class WebSocketChatHandler extends TextWebSocketHandler {
 
     @Autowired
     private UserService userService;
@@ -36,13 +36,13 @@ public class WebSocketController extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        super.afterConnectionEstablished(session);
+        //super.afterConnectionEstablished(session);
         sessions.add(session);
     }
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-        super.handleTextMessage(session, message);
+        //super.handleTextMessage(session, message);
         /*Создать бин джсона
         * Заинжектить
         * Входящее раскодировать из джсона
@@ -60,7 +60,8 @@ public class WebSocketController extends TextWebSocketHandler {
 
         for(WebSocketSession wss : sessions) {
             try {
-                wss.sendMessage(message);
+                TextMessage newMessage = new TextMessage("Online!");
+                wss.sendMessage(newMessage);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -69,12 +70,9 @@ public class WebSocketController extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-        super.afterConnectionClosed(session, status);
+        //super.afterConnectionClosed(session, status);
         sessions.remove(session);
     }
 
-    @RequestMapping(value = "/chat")
-    public void toClient() {
 
-    }
 }

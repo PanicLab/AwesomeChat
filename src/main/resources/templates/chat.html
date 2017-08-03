@@ -7,10 +7,91 @@
 </head>
 <body>
     <script language="JavaScript">
-        function setMessageTarget(userButton) {
-            var target = userButton.getAttribute("data-xxxx");
-            document.getElementById("send_message").value = "To " + target + ": ";
+        var ws = null;
+
+        function connect() {
+            ws = new WebSocket("ws://localhost:8080/ws-chat");
+            ws.onopen = onOpen;
+            ws.onclose = onClose;
+            ws.onerror = onError;
+            ws.onmessage = onMessage;
         }
+
+        function onOpen() {
+            var date = new Date();
+            var hour = date.getHours();
+            var min = date.getMinutes();
+            var sec = date.getSeconds();
+            console.log(getTime() + "Info: WebSocket connection opened.");
+            //ws.send("Welcome!");
+        }
+
+        function onClose() {
+            setTimeout(connect, 1000);
+            var date = new Date();
+            var hour = date.getHours();
+            var min = date.getMinutes();
+            var sec = date.getSeconds();
+            console.log(getTime() + "Info: WebSocket closed.");
+        }
+
+        function onMessage(message) {
+            var date = new Date();
+            var hour = date.getHours();
+            var min = date.getMinutes();
+            var sec = date.getSeconds();
+            console.log(getTime() + "Message detected: " + message.data );
+            //ws.send(message.data);
+        }
+
+        function getTime() {
+            var date = new Date();
+            var hour = date.getHours();
+            var min = date.getMinutes();
+            var sec = date.getSeconds();
+            var time = "" + convertTimeUnit(hour) + ":" + convertTimeUnit(min) + ":" + convertTimeUnit(sec) + ": ";
+            return time;
+        }
+
+        function convertTimeUnit(unit) {
+            if (unit.toString().length === 1) return "0" + unit.toString();
+            return unit;
+        }
+
+        function onError(error) {
+            console.log('Error detected.');
+        }
+
+        function setMessageTarget(userButton) {
+            var target = userButton.getAttribute("data-username");
+            document.getElementById("message_text").value = "To " + target + ": ";
+        }
+
+        function sendMessageByEnter(event) {
+            var messageTextField = document.getElementById("message_text");
+            var message = messageTextField.value;
+            if (event.keyCode === 13) {
+                if (message.length > 0) sendMessage(event);
+            }
+        }
+
+        function sendMessage(event) {
+            var messageTextField = document.getElementById("message_text");
+            var message = messageTextField.value;
+            messageTextField.value = "";
+
+            var textArea = document.getElementById("textarea");
+            textArea.value = textArea.value + message + "\n";
+
+            ws.send(message);
+
+        }
+
+        window.addEventListener("load", connect, false);
+/*        Window.onload = function () {
+            connect();
+            //ws.send("Welcome from client!");
+        }*/
     </script>
     <h1>Awesome Chat</h1>
     <!--css not works for now, have no idea why. Will solve it later-->
@@ -23,7 +104,7 @@
                 <textarea id="userlist" cols="20" rows="20" readonly="readonly"></textarea>
                 <button id="George@R"
                         style="position: absolute; top: 0; left: 0; width: 100%; text-align: left; outline: none"
-                        data-xxxx="George Raspupkin"
+                        data-username="George Raspupkin"
                         onclick="setMessageTarget(this);">George R.</button>
             </div>
         </span>
@@ -31,8 +112,8 @@
 
     <div>
 <!--        <textarea id="input" cols="70" rows="1" onkeyup="sendMessage(event);"></textarea><br/>-->
-        Your message: <input id="send_message" type="text" size="71" maxlength="71" onkeyup="sendMessage(event);"/>
-        <input type="submit" value="Send!" onclick="sendMessage(event);"/><br/>
+        Your message: <input id="message_text" type="text" size="71" maxlength="71" onkeyup="sendMessageByEnter(event);"/>
+        <input type="submit" value="Send!" onclick="sendMessage(event);"/>
     </div>
     <br/><br/><br/>
 
