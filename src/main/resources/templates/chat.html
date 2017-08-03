@@ -6,6 +6,12 @@
     <link rel="stylesheet" type="text/css" href="/static/chat_style.css"/>
 </head>
 <body>
+    <script language="JavaScript">
+        function setMessageTarget(userButton) {
+            var target = userButton.getAttribute("data-xxxx");
+            document.getElementById("send_message").value = "To " + target + ": ";
+        }
+    </script>
     <h1>Awesome Chat</h1>
     <!--css not works for now, have no idea why. Will solve it later-->
     <div style="position: relative; display: inline-block">
@@ -15,15 +21,18 @@
             </div>
             <div style="position: relative; display: inline-block">
                 <textarea id="userlist" cols="20" rows="20" readonly="readonly"></textarea>
-                <button style="position: absolute; top: 0; left: 0; width: 100%; text-align: left; border: none; outline: none">George R.</button>
+                <button id="George@R"
+                        style="position: absolute; top: 0; left: 0; width: 100%; text-align: left; outline: none"
+                        data-xxxx="George Raspupkin"
+                        onclick="setMessageTarget(this);">George R.</button>
             </div>
         </span>
     </div>
 
     <div>
 <!--        <textarea id="input" cols="70" rows="1" onkeyup="sendMessage(event);"></textarea><br/>-->
-        Your message: <input type="text" size="71" maxlength="71" onkeyup="sendMessage(event);"/>
-        <input type="submit" id="send" value="Send!" onclick="sendMessage(event);"/><br/>
+        Your message: <input id="send_message" type="text" size="71" maxlength="71" onkeyup="sendMessage(event);"/>
+        <input type="submit" value="Send!" onclick="sendMessage(event);"/><br/>
     </div>
     <br/><br/><br/>
 
