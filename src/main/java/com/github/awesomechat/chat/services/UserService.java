@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
 
-    public boolean isValid(User user) {
+    public boolean isValid(User user, String password) {
         return true;
     }
 }

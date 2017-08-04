@@ -31,11 +31,18 @@ public class AuthorizeController {
         String userFirstName = request.getParameter("firstName");
         String userLastName = request.getParameter("lastName");
         String userPassword = request.getParameter("password");
-        User user = new User(userFirstName, userLastName, userPassword);
-        if(userService.isValid(user)) {
-            attributes.addAttribute("firstName", userFirstName);
-            attributes.addAttribute("lastName", userLastName);
-            return new ModelAndView("redirect:/chat");
+        User user = new User();
+        user.setFirstName(userFirstName);
+        user.setLastName(userLastName);
+        if(userService.isValid(user, userPassword)) {
+/*            attributes.addAttribute("firstName", userFirstName);
+            attributes.addAttribute("lastName", userLastName);*/
+            ModelAndView mav = new ModelAndView("redirect:/chat");
+           // mav.addObject("firstName", userFirstName);
+            //mav.addObject("lastName", userLastName);
+            //mav.addObject("user", user);
+            attributes.addFlashAttribute("user", user);
+            return mav;
         } else {
             return new ModelAndView("redirect:/error_page");
         }
