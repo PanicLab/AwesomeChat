@@ -5,7 +5,7 @@ import java.util.Date;
 public class ChatMessage extends Message {
 
     private String message;
-    private String userName;
+    private String author;
     private Date timeSent;
 
 
@@ -17,12 +17,12 @@ public class ChatMessage extends Message {
         this.message = message;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getAuthor() {
+        return author;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setAuthor(String author) {
+        this.author = author;
     }
 
     public void setTimeSent(Date timeSent) {
