@@ -23,7 +23,7 @@
         /*<![CDATA[*/
         var me = [[${user.fullName}]];
         /*]]>*/
-        var userList = {};
+        var users_in_list = [];
 
         function connect() {
             ws = new WebSocket("ws://localhost:8080/ws-chat");
@@ -74,7 +74,38 @@
                 printMessage(text);
             }
 
+            if (message.type === MessageTypes.USERLIST) {
+                users_in_list = message.users;
+                //console.log(users);
+
+                for (var x in message.users) {
+                    console.log(message.users[x]);
+                    user = message.users[x];
+                    populateUserList(user)
+                }
+
+            }
+
         }
+
+        function populateUserList(user) {
+            var button = document.createElement("button");
+            button.type = button;
+            //button.value = user;
+            button.innerHTML = user;
+            button.onclick = setMessageTarget;
+/*            button.style.position = "absolute";
+            button.style.top = "0";
+            button.style.left = "0";*/
+            button.style.width = "100%";
+            document.getElementById("wrapper").appendChild(button);
+            console.log("populate " + user);
+        }
+
+/*        function UserListMessage(users) {
+            this.type = MessageTypes.USERLIST;
+            this.users = users;
+        }*/
 
         function printMessage(text) {
             var textArea = document.getElementById("textarea");
@@ -131,14 +162,6 @@
             this.message = text;
         }
 
-        function populateUserList() {
-            var button = document.createElement("button");
-            button.type = button;
-            button.value = "remove me";
-            button.onclick = setMessageTarget(button);
-            document.getElementById("userlist").appendChild(button);
-        }
-
         window.addEventListener("load", connect, false);
 /*        Window.onload = function () {
             connect();
@@ -152,15 +175,20 @@
             <div style="position: relative; display: inline-block">
                 <textarea id="textarea" cols="70" rows="20" readonly="readonly" ></textarea>
             </div>
-            <div style="position: relative; display: inline-block">
+            <div id="users_area" style="position: relative; display: inline-block">
                 <textarea id="userlist" cols="20" rows="20" readonly="readonly"></textarea>
                 <!--Next comment is intellij idea's + thymeleaf bug workaround. Do not remove!-->
                 <!--/*@thymesVar id="user" type="com.github.awesomechat.chat.models.User"*/-->
-                <button id="George@R"
+<!--                <button id="George@R"
                         style="position: absolute; top: 0; left: 0; width: 100%; text-align: left; outline: none;
                         border: none"
                         data-username="George Raspupkin"
-                        onclick="setMessageTarget(this);" th:text="${user.fullName}">George R.</button>
+                        onclick="setMessageTarget(this);" th:text="${user.fullName}">George R.</button>-->
+                <div id="wrapper"
+                     style="position: absolute; top: 0; left: 0; width: 100%; text-align: left; outline: none;
+                     border: none">
+
+                </div>
             </div>
         </span>
     </div>
