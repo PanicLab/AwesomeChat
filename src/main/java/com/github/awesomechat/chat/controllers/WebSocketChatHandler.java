@@ -126,7 +126,7 @@ public class WebSocketChatHandler extends TextWebSocketHandler {
 
     private String timeNow() {
         LocalTime time = LocalTime.now();
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("HH:mm:ss ");
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("HH:mm:ss");
         return time.format(format) + ": ";
     }
 

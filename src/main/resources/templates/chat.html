@@ -18,7 +18,8 @@
         MessageTypes.USERLIST = 4;
         MessageTypes.GETMESSAGES = 5;
         MessageTypes.MESSAGELIST = 6;
-
+        MessageTypes.QUIT = 7;
+        /* next comments is thymeleaf feature. Do not remove!*/
         /*<![CDATA[*/
         var me = [[${user.fullName}]];
         /*]]>*/
@@ -36,7 +37,6 @@
             console.log(getTime() + "Info: WebSocket connection opened.");
             var message = new JoinMessage(me);
             ws.send(JSON.stringify(message));
-            //ws.send("Welcome!");
         }
 
         function JoinMessage(name) {
@@ -45,13 +45,40 @@
         }
 
         function onClose() {
-            //setTimeout(connect, 1000);
             console.log(getTime() + "Info: WebSocket closed.");
         }
 
         function onMessage(message) {
             console.log(getTime() + "Message detected: " + message.data );
-            //ws.send(message.data);
+            var data = JSON.parse(message.data);
+            processMessage(data);
+        }
+
+        function processMessage(message) {
+            var user;
+            var text;
+            if (message.type === MessageTypes.JOIN ) {
+                user = message.name;
+                text = getTime() + user + " has join the chat.";
+                printMessage(text);
+            }
+
+            if (message.type === MessageTypes.QUIT) {
+                user = message.name;
+                text = getTime() + user + " has leave the chat.";
+                printMessage(text);
+            }
+
+            if (message.type === MessageTypes.CHAT) {
+                text = message.message;
+                printMessage(text);
+            }
+
+        }
+
+        function printMessage(text) {
+            var textArea = document.getElementById("textarea");
+            textArea.value = textArea.value + text + "\n";
         }
 
         function getTime() {
@@ -73,7 +100,7 @@
         }
 
         function setMessageTarget(userButton) {
-/*            var target = userButton.getAttribute("data-username");*/
+/*          next comments is thymeleaf feature. Do not remove!*/
             /*<![CDATA[*/
             var target = [[${user.fullName}]];
             /*]]>*/
@@ -88,13 +115,11 @@
             }
         }
 
-        function sendMessage(event) {
+        function sendMessage() {
             var messageTextField = document.getElementById("message_text");
             var text = messageTextField.value;
             messageTextField.value = "";
-
-            var textArea = document.getElementById("textarea");
-            textArea.value = textArea.value + text + "\n";
+            if (text === "") return;
 
             var message = new ChatMessage(me, text);
             ws.send(JSON.stringify(message));
@@ -141,9 +166,8 @@
     </div>
 
     <div>
-<!--        <textarea id="input" cols="70" rows="1" onkeyup="sendMessage(event);"></textarea><br/>-->
         Your message: <input id="message_text" type="text" size="71" maxlength="71" onkeyup="sendMessageByEnter(event);"/>
-        <input type="submit" value="Send!" onclick="sendMessage(event);"/>
+        <input type="submit" value="Send!" onclick="sendMessage();"/>
     </div>
     <br/><br/><br/>
 
