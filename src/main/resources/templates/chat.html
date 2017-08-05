@@ -33,15 +33,14 @@
 
         function onOpen() {
             console.log(getTime() + "Info: WebSocket connection opened.");
+            var message = new JoinMessage(me);
+            ws.send(JSON.stringify(message));
             //ws.send("Welcome!");
         }
 
-        function createJoinMessage(name) {
-            var message;
-            message.type = MessageTypes.JOIN;
-            message.name = name;
-            message = JSON.stringify(message);
-            return message;
+        function JoinMessage(name) {
+            this.type = MessageTypes.JOIN;
+            this.name = name;
         }
 
         function onClose() {
