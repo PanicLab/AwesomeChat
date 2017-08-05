@@ -17,7 +17,7 @@ public class ChatController {
 /*        User user = new User();
         user.setFirstName("Vasja");
         user.setLastName("Pupkin");*/
-
+        if (user.getFullName().equals("null null") ) return new ModelAndView("redirect:/login");
         return new ModelAndView("chat", "user", user);
     }
 }

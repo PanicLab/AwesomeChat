@@ -7,9 +7,9 @@ import java.util.List;
 
 
 public class UserListMessage extends Message {
-    public List<User> users;
+    public List<String> users;
 
-    public UserListMessage(List<User> users){
+    public UserListMessage(List<String> users){
         this.setType(4);
         this.users = users;
     }

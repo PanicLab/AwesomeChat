@@ -99,6 +99,14 @@
 
         }
 
+        function populateUserList() {
+            var button = document.createElement("button");
+            button.type = button;
+            button.value = "remove me";
+            button.onclick = setMessageTarget(button);
+            document.getElementById("userlist").appendChild(button);
+        }
+
         window.addEventListener("load", connect, false);
 /*        Window.onload = function () {
             connect();
@@ -117,7 +125,8 @@
                 <!--Next comment is intellij idea's + thymeleaf bug workaround. Do not remove!-->
                 <!--/*@thymesVar id="user" type="com.github.awesomechat.chat.models.User"*/-->
                 <button id="George@R"
-                        style="position: absolute; top: 0; left: 0; width: 100%; text-align: left; outline: none"
+                        style="position: absolute; top: 0; left: 0; width: 100%; text-align: left; outline: none;
+                        border: none"
                         data-username="George Raspupkin"
                         onclick="setMessageTarget(this);" th:text="${user.fullName}">George R.</button>
             </div>

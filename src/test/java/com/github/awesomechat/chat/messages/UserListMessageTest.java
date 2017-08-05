@@ -13,19 +13,17 @@ public class UserListMessageTest {
 
     @Test
     public void createUserListMessage() throws Exception {
-        List<User> users = new ArrayList<>();
-        users.add(new User("Sergey", "Kuzmin"));
-        users.add(new User("Gena", "TheCroc"));
-        users.add(new User("Peter", "TheGreatest"));
+        List<String> users = new ArrayList<>();
+        users.add("Sergey Kuzmin");
+        users.add("Gena TheCroc");
+        users.add("Peter TheGreatest");
         UserListMessage message = new UserListMessage(users);
 
         Jsonizer jsonizer = new Jsonizer();
         String jsonMessage = jsonizer.encode(message);
         System.out.println(jsonMessage);
 
-        String expected = "{\"type\":4,\"users\":[{\"firstName\":\"Sergey\",\"lastName\":\"Kuzmin\",\"fullName\":" +
-                "\"Sergey Kuzmin\"},{\"firstName\":\"Gena\",\"lastName\":\"TheCroc\",\"fullName\":\"Gena TheCroc\"}," +
-                "{\"firstName\":\"Peter\",\"lastName\":\"TheGreatest\",\"fullName\":\"Peter TheGreatest\"}]}";
+        String expected = "{\"type\":4,\"users\":[\"Sergey Kuzmin\",\"Gena TheCroc\",\"Peter TheGreatest\"]}";
         assertEquals(expected, jsonMessage);
     }
 

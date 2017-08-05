@@ -3,6 +3,7 @@ package com.github.awesomechat.chat.controllers;
 
 import com.github.awesomechat.chat.messages.JoinMessage;
 import com.github.awesomechat.chat.messages.Message;
+import com.github.awesomechat.chat.messages.UserListMessage;
 import com.github.awesomechat.chat.models.User;
 import com.github.awesomechat.chat.services.JsonDecoder;
 import com.github.awesomechat.chat.services.JsonEncoder;
@@ -32,8 +33,11 @@ public class WebSocketChatHandler extends TextWebSocketHandler {
     private JsonDecoder decoder;
 
     private static final List<WebSocketSession> sessions = new CopyOnWriteArrayList<>();
-    private static final List<User> users = Collections.synchronizedList(new ArrayList<>());
+    private static final List<String> users = Collections.synchronizedList(new ArrayList<>());
 
+    static {
+        users.add("George Raspupkin");
+    }
 /*    private SimpMessagingTemplate template;
 
     @Autowired
@@ -83,6 +87,10 @@ public class WebSocketChatHandler extends TextWebSocketHandler {
         if (message instanceof JoinMessage) {
             process(JoinMessage.class.cast(message));
             broadcast(json);
+
+            UserListMessage userList = new UserListMessage(users);
+            json = encoder.encode(userList);
+            broadcast(json);
             return;
         }
 
@@ -91,9 +99,7 @@ public class WebSocketChatHandler extends TextWebSocketHandler {
     }
 
     private void process(JoinMessage message) {
-        String firstName = message.getName().split(" ")[0];
-        String lastName = message.getName().split(" ")[1];
-        users.add(new User(firstName, lastName));
+        if(!users.contains(message.getName())) users.add(message.getName());
     }
 
     private void broadcast(String json) {
