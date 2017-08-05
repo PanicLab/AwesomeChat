@@ -5,6 +5,11 @@ public class JoinMessage extends Message {
 
     private String name;
 
+    public JoinMessage() {
+        super();
+        this.setType(Message.JOIN);
+    }
+
     public String getName() {
         return name;
     }
