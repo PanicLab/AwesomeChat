@@ -8,6 +8,7 @@ public class Message {
     public static final int USER_LIST = 4;
     public static final int CHAT_MESSAGES = 5;
     public static final int MESSAGE_LIST = 6;
+    public static final int QUIT = 7;
 
     private int type;
 

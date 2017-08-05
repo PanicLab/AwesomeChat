@@ -1,10 +1,7 @@
 package com.github.awesomechat.chat.controllers;
 
 
-import com.github.awesomechat.chat.messages.JoinMessage;
-import com.github.awesomechat.chat.messages.Message;
-import com.github.awesomechat.chat.messages.UserListMessage;
-import com.github.awesomechat.chat.models.User;
+import com.github.awesomechat.chat.messages.*;
 import com.github.awesomechat.chat.services.JsonDecoder;
 import com.github.awesomechat.chat.services.JsonEncoder;
 import com.github.awesomechat.chat.services.UserService;
@@ -16,6 +13,8 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.io.IOException;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -38,16 +37,10 @@ public class WebSocketChatHandler extends TextWebSocketHandler {
     static {
         users.add("George Raspupkin");
     }
-/*    private SimpMessagingTemplate template;
 
-    @Autowired
-    public WebSocketController(SimpMessagingTemplate template) {
-        this.template = template;
-    }*/
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        //super.afterConnectionEstablished(session);
         sessions.add(session);
     }
 
@@ -61,31 +54,16 @@ public class WebSocketChatHandler extends TextWebSocketHandler {
         * блок свич по каждому типу создает ответное сообщение
         * броадкаст обратно
         * */
-/*        Message m = new Message();
-        TextMessage mmm = new TextMessage("");
 
-
-        ObjectMapper mapper = new ObjectMapper();
-        //set text to message
-        //send m*/
         String json = message.getPayload();
-        parseMessage(json);
+        parseMessage(json, session);
 
-
-/*        for(WebSocketSession wss : sessions) {
-            try {
-                TextMessage newMessage = new TextMessage("Online!");
-                wss.sendMessage(newMessage);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }*/
     }
 
-    private void parseMessage(String json) {
+    private void parseMessage(String json, WebSocketSession session) {
         Message message = decoder.decode(json);
         if (message instanceof JoinMessage) {
-            process(JoinMessage.class.cast(message));
+            process(JoinMessage.class.cast(message), session);
             broadcast(json);
 
             UserListMessage userList = new UserListMessage(users);
@@ -94,12 +72,45 @@ public class WebSocketChatHandler extends TextWebSocketHandler {
             return;
         }
 
+        if (message instanceof ChatMessage) {
+            String author = ChatMessage.class.cast(message).getAuthor();
+            String textIn = ChatMessage.class.cast(message).getMessage();
+            String textOut = timeNow() + "[" + author + "] " + textIn;
+
+            ChatMessage chatMessage = new ChatMessage();
+            chatMessage.setAuthor(author);
+            chatMessage.setMessage(textOut);
+            json = encoder.encode(chatMessage);
+            broadcast(json);
+            return;
+        }
+
         String unknown = "Unknown message type detected!";
         broadcast(unknown);
     }
 
-    private void process(JoinMessage message) {
-        if(!users.contains(message.getName())) users.add(message.getName());
+    private void broadcastUserList() {
+        UserListMessage userList = new UserListMessage(users);
+        String json = encoder.encode(userList);
+        broadcast(json);
+    }
+
+    private void process(JoinMessage message, WebSocketSession session) {
+        users.add(message.getName());
+        session.getAttributes().put("userName", message.getName());
+    }
+
+    private void process(QuitMessage message, WebSocketSession session) {
+        users.remove(message.getName());
+
+    }
+
+    private void process(ChatMessage message) {
+        String author = message.getAuthor();
+        String text = message.getMessage();
+        String newText = timeNow() + "[" + author + "] " + text;
+        message.setMessage(newText);
+
     }
 
     private void broadcast(String json) {
@@ -113,10 +124,26 @@ public class WebSocketChatHandler extends TextWebSocketHandler {
         }
     }
 
+    private String timeNow() {
+        LocalTime time = LocalTime.now();
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("HH:mm:ss ");
+        return time.format(format) + ": ";
+    }
+
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-        //super.afterConnectionClosed(session, status);
         sessions.remove(session);
+
+        String userName = (String)session.getAttributes().get("userName");
+        QuitMessage quitMessage = new QuitMessage();
+        quitMessage.setName(userName);
+
+        process(quitMessage, session);
+
+        String json = encoder.encode(quitMessage);
+        broadcast(json);
+
+        broadcastUserList();
     }
 
 

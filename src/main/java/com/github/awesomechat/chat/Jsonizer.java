@@ -65,6 +65,11 @@ public class Jsonizer implements JsonEncoder, JsonDecoder{
                     message = mapper.readValue(str, UserListMessage.class);
                     break;
                 }
+
+                case Message.QUIT: {
+                    message = mapper.readValue(str, QuitMessage.class);
+                    break;
+                }
             }
 
         } catch (JsonException e) {

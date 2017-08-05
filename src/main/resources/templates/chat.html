@@ -13,7 +13,7 @@
         var MessageTypes = {};
 
         MessageTypes.JOIN = 1;
-        MessageTypes.MESSAGE = 2;
+        MessageTypes.CHAT = 2;
         MessageTypes.GETUSERS = 3;
         MessageTypes.USERLIST = 4;
         MessageTypes.GETMESSAGES = 5;
@@ -22,6 +22,7 @@
         /*<![CDATA[*/
         var me = [[${user.fullName}]];
         /*]]>*/
+        var userList = {};
 
         function connect() {
             ws = new WebSocket("ws://localhost:8080/ws-chat");
@@ -89,14 +90,20 @@
 
         function sendMessage(event) {
             var messageTextField = document.getElementById("message_text");
-            var message = getTime() + "[" + me + "] " + messageTextField.value;
+            var text = messageTextField.value;
             messageTextField.value = "";
 
             var textArea = document.getElementById("textarea");
-            textArea.value = textArea.value + message + "\n";
+            textArea.value = textArea.value + text + "\n";
 
-            ws.send(message);
+            var message = new ChatMessage(me, text);
+            ws.send(JSON.stringify(message));
+        }
 
+        function ChatMessage(name, text) {
+            this.type = MessageTypes.CHAT;
+            this.author = name;
+            this.message = text;
         }
 
         function populateUserList() {

@@ -4,6 +4,8 @@ import com.github.awesomechat.chat.Jsonizer;
 import com.github.awesomechat.chat.models.User;
 import org.junit.Test;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,5 +28,4 @@ public class UserListMessageTest {
         String expected = "{\"type\":4,\"users\":[\"Sergey Kuzmin\",\"Gena TheCroc\",\"Peter TheGreatest\"]}";
         assertEquals(expected, jsonMessage);
     }
-
 }
