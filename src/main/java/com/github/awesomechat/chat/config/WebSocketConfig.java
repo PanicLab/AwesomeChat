@@ -14,17 +14,6 @@ import java.util.concurrent.TimeUnit;
 @EnableWebSocket
 public class WebSocketConfig implements WebSocketConfigurer {
 
-/*    @Override
-    public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws-chat-endpoint");
-    }
-
-    @Override
-    public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.setApplicationDestinationPrefixes("/app");
-        config.enableSimpleBroker("/topic");
-    }*/
-
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry.addHandler(webSocketChatHandler(), "/ws-chat");
