@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:display="http://www.w3.org/1999/xhtml">
+<!--Next comment is required to overcome intellij idea's thymeleaf plugin bug. Please, do not remove!-->
+<!--/*@thymesVar id="user" type="com.github.awesomechat.chat.models.User"*/-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
     <title>Chat</title>
@@ -19,11 +20,13 @@
         MessageTypes.GETMESSAGES = 5;
         MessageTypes.MESSAGELIST = 6;
         MessageTypes.QUIT = 7;
+
         /* next comments is thymeleaf feature. Do not remove!*/
         /*<![CDATA[*/
         var me = [[${user.fullName}]];
         /*]]>*/
-        var users_in_list = [];
+        var chatUsers = [];
+
 
         function connect() {
             ws = new WebSocket("ws://localhost:8080/ws-chat");
@@ -49,7 +52,7 @@
         }
 
         function onMessage(message) {
-            console.log(getTime() + "Message detected: " + message.data );
+            //console.log(getTime() + "Message detected: " + message.data );
             var data = JSON.parse(message.data);
             processMessage(data);
         }
@@ -76,17 +79,14 @@
 
             if (message.type === MessageTypes.USERLIST) {
                 clearUserList();
-                users_in_list = message.users;
-                //console.log(users);
+                chatUsers = message.users;
 
                 for (var x in message.users) {
-                    console.log(message.users[x]);
+                    //console.log(message.users[x]);
                     user = message.users[x];
                     populateUserList(user)
                 }
-
             }
-
         }
         
         function clearUserList() {
@@ -106,17 +106,8 @@
             };
             button.style.width = "100%";
             document.getElementById("wrapper").appendChild(button);
-            console.log("populate " + user);
+            //console.log("populate " + user);
         }
-
-        function setMessageTarget(userButton) {
-            /*          next comments is thymeleaf feature. Do not remove!*/
-            /*<![CDATA[*/
-            var target = [[${user.fullName}]];
-            /*]]>*/
-            document.getElementById("message_text").value = target + ", ";
-        }
-
 
         function printMessage(text) {
             var textArea = document.getElementById("textarea");
@@ -166,13 +157,11 @@
         }
 
         window.addEventListener("load", connect, false);
-/*        Window.onload = function () {
-            connect();
-            //ws.send("Welcome from client!");
-        }*/
+
+
     </script>
     <h1>Awesome Chat</h1>
-    <!--css not works for now, have no idea why. Will solve it later-->
+    <!--css not works for now, have no idea why. While just use style element. Will solve it later-->
     <div style="position: relative; display: inline-block">
         <span>
             <div style="position: relative; display: inline-block">
@@ -180,13 +169,6 @@
             </div>
             <div id="users_area" style="position: relative; display: inline-block">
                 <textarea id="userlist" cols="20" rows="20" readonly="readonly"></textarea>
-                <!--Next comment is intellij idea's + thymeleaf bug workaround. Do not remove!-->
-                <!--/*@thymesVar id="user" type="com.github.awesomechat.chat.models.User"*/-->
-<!--                <button id="George@R"
-                        style="position: absolute; top: 0; left: 0; width: 100%; text-align: left; outline: none;
-                        border: none"
-                        data-username="George Raspupkin"
-                        onclick="setMessageTarget(this);" th:text="${user.fullName}">George R.</button>-->
                 <div id="wrapper"
                      style="position: absolute; top: 0; left: 0; width: 100%; text-align: left; outline: none;
                      border: none">

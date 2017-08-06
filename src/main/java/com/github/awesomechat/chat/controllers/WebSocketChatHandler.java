@@ -2,10 +2,14 @@ package com.github.awesomechat.chat.controllers;
 
 
 import com.github.awesomechat.chat.messages.*;
+import com.github.awesomechat.chat.models.ChatBotBean;
 import com.github.awesomechat.chat.services.JsonDecoder;
 import com.github.awesomechat.chat.services.JsonEncoder;
 import com.github.awesomechat.chat.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.core.task.TaskExecutor;
+import org.springframework.scheduling.concurrent.DefaultManagedTaskExecutor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -30,12 +34,19 @@ public class WebSocketChatHandler extends TextWebSocketHandler {
     private JsonEncoder encoder;
     @Autowired
     private JsonDecoder decoder;
+    @Autowired
+    private TaskExecutor executor;
+    @Autowired
+    private ChatBotBean botBean;
+    private static final Object broadcastLock = new Object();
 
     private static final List<WebSocketSession> sessions = new CopyOnWriteArrayList<>();
     private static final List<String> users = Collections.synchronizedList(new ArrayList<>());
+    private static final String BOT = "George Raspupkin";
+
 
     static {
-        users.add("George Raspupkin");
+        users.add(BOT);
     }
 
 
@@ -82,6 +93,21 @@ public class WebSocketChatHandler extends TextWebSocketHandler {
             chatMessage.setMessage(textOut);
             json = encoder.encode(chatMessage);
             broadcast(json);
+
+            if(textIn.contains(BOT)) {
+                executor.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        String botMessage = botBean.response(textIn, author);
+                        botMessage = timeNow() + "[" + BOT + "] " + author + ", " + botMessage;
+                        ChatMessage chatMessage = new ChatMessage();
+                        chatMessage.setAuthor(BOT);
+                        chatMessage.setMessage(botMessage);
+                        String json = encoder.encode(chatMessage);
+                        broadcast(json);
+                    }
+                });
+            }
             return;
         }
 
@@ -97,12 +123,12 @@ public class WebSocketChatHandler extends TextWebSocketHandler {
 
     private void process(JoinMessage message, WebSocketSession session) {
         users.add(message.getName());
+        ChatBotBean.addUser(message.getName());
         session.getAttributes().put("userName", message.getName());
     }
 
     private void process(QuitMessage message, WebSocketSession session) {
         users.remove(message.getName());
-
     }
 
     private void process(ChatMessage message) {
@@ -114,12 +140,14 @@ public class WebSocketChatHandler extends TextWebSocketHandler {
     }
 
     private void broadcast(String json) {
-        TextMessage message = new TextMessage(json);
-        for (WebSocketSession wss: sessions) {
-            try {
-                wss.sendMessage(message);
-            } catch (IOException e) {
-                e.printStackTrace();
+        synchronized (broadcastLock) {
+            TextMessage message = new TextMessage(json);
+            for (WebSocketSession wss : sessions) {
+                try {
+                    wss.sendMessage(message);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
