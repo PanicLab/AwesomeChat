@@ -16,18 +16,19 @@ public class ChatBotBean {
 
     static {
         List<String> list = new ArrayList<>(NUMBER_OF_URLS);
-        list.add("1");
-        list.add("2");
-        list.add("3");
-        list.add("4");
-        list.add("5");
-        list.add("6");
-        list.add("7");
-        list.add("8");
-        list.add("9");
-        list.add("0");
+        list.add("Did you see this? https://habrahabr.ru/post/334964/");
+        list.add("Now I'm afraid of this - https://habrahabr.ru/post/334966/");
+        list.add("This topic made my day - https://habrahabr.ru/post/334992/");
+        list.add("Lol! https://habrahabr.ru/post/334982/");
+        list.add("https://habrahabr.ru/post/334970/");
+        list.add("https://habrahabr.ru/company/yandex/blog/335002/");
+        list.add("https://habrahabr.ru/company/solarsecurity/blog/334796/");
+        list.add("And mail.ru is here! https://habrahabr.ru/company/mailru/blog/334712/");
+        list.add("This is our future - https://habrahabr.ru/post/334804/");
+        list.add("You knew that? - https://habrahabr.ru/company/erlyvideo/blog/334912/");
         urls = Collections.unmodifiableList(list);
     }
+
 
     public static void addUser(String name) {
         if(usersUrls.containsKey(name)) return;
@@ -39,9 +40,6 @@ public class ChatBotBean {
         usersUrls.put(name, userUrls);
     }
 
-    public static void removeUser(String name) {
-
-    }
 
     public String response(String msg, String user) {
         try {
@@ -58,12 +56,6 @@ public class ChatBotBean {
 
         String response = usersUrls.get(user).get(urlIndex);
         usersUrls.get(user).remove(response);
-        response += "> urlsLeft: " + urlsLeft;
         return response;
     }
-
-    private void removeUsersUrl(String name, String url) {
-        usersUrls.get(name).remove(url);
-    }
-
 }
