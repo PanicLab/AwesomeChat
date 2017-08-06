@@ -1,8 +1,6 @@
 package com.github.awesomechat.chat.messages;
 
 
-import com.github.awesomechat.chat.models.User;
-
 import java.util.List;
 
 

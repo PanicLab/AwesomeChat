@@ -5,11 +5,8 @@ import com.github.awesomechat.chat.messages.*;
 import com.github.awesomechat.chat.models.ChatBotBean;
 import com.github.awesomechat.chat.services.JsonDecoder;
 import com.github.awesomechat.chat.services.JsonEncoder;
-import com.github.awesomechat.chat.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.core.task.TaskExecutor;
-import org.springframework.scheduling.concurrent.DefaultManagedTaskExecutor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -94,20 +91,6 @@ public class WebSocketChatHandler extends TextWebSocketHandler {
                     String jsn = encoder.encode(msg);
                     broadcast(jsn);
                 });
-
-
-/*                        new Runnable() {
-                    @Override
-                    public void run() {
-                        String botMessage = botBean.response(textIn, author);
-                        botMessage = timeNow() + "[" + BOT + "] " + author + ", " + botMessage;
-                        ChatMessage chatMessage = new ChatMessage();
-                        chatMessage.setAuthor(BOT);
-                        chatMessage.setMessage(botMessage);
-                        String json = encoder.encode(chatMessage);
-                        broadcast(json);
-                    }
-                });*/
             }
             return;
         }
@@ -132,13 +115,6 @@ public class WebSocketChatHandler extends TextWebSocketHandler {
         users.remove(message.getName());
     }
 
-/*    private void process(ChatMessage message) {
-        String author = message.getAuthor();
-        String text = message.getMessage();
-        String newText = timeNow() + "[" + author + "] " + text;
-        message.setMessage(newText);
-
-    }*/
 
     private void broadcast(String json) {
         synchronized (broadcastLock) {

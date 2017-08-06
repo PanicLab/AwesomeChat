@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
-import java.nio.charset.Charset;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -68,8 +67,6 @@ public class UserRepositoryImpl implements UserRepository {
         String sql = "INSERT INTO CHAT_USERS (NAME, SALT, PASSWORD) VALUES (?, ?, ?)";
 
         String salt = passwordHasher.getSalt();
-/*        String strPass = passwordHasher.safePassword(password + salt);
-        byte[] bytePass = strPass.getBytes(Charset.forName("UTF-8"));*/
 
         try (
         Connection con = dataSource.getConnection();
