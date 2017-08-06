@@ -29,8 +29,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class WebSocketChatHandler extends TextWebSocketHandler {
 
     @Autowired
-    private UserService userService;
-    @Autowired
     private JsonEncoder encoder;
     @Autowired
     private JsonDecoder decoder;
@@ -57,14 +55,6 @@ public class WebSocketChatHandler extends TextWebSocketHandler {
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-        //super.handleTextMessage(session, message);
-        /*Создать бин джсона
-        * Заинжектить
-        * Входящее раскодировать из джсона
-        * Узнать его тип
-        * блок свич по каждому типу создает ответное сообщение
-        * броадкаст обратно
-        * */
 
         String json = message.getPayload();
         parseMessage(json, session);
@@ -95,7 +85,18 @@ public class WebSocketChatHandler extends TextWebSocketHandler {
             broadcast(json);
 
             if(textIn.contains(BOT)) {
-                executor.execute(new Runnable() {
+                executor.execute( () -> {
+                    String botMessage = botBean.response(textIn, author);
+                    botMessage = timeNow() + "[" + BOT + "] " + author + ", " + botMessage;
+                    ChatMessage msg = new ChatMessage();
+                    msg.setAuthor(BOT);
+                    msg.setMessage(botMessage);
+                    String jsn = encoder.encode(msg);
+                    broadcast(jsn);
+                });
+
+
+/*                        new Runnable() {
                     @Override
                     public void run() {
                         String botMessage = botBean.response(textIn, author);
@@ -106,7 +107,7 @@ public class WebSocketChatHandler extends TextWebSocketHandler {
                         String json = encoder.encode(chatMessage);
                         broadcast(json);
                     }
-                });
+                });*/
             }
             return;
         }
@@ -127,17 +128,17 @@ public class WebSocketChatHandler extends TextWebSocketHandler {
         session.getAttributes().put("userName", message.getName());
     }
 
-    private void process(QuitMessage message, WebSocketSession session) {
+    private void process(QuitMessage message) {
         users.remove(message.getName());
     }
 
-    private void process(ChatMessage message) {
+/*    private void process(ChatMessage message) {
         String author = message.getAuthor();
         String text = message.getMessage();
         String newText = timeNow() + "[" + author + "] " + text;
         message.setMessage(newText);
 
-    }
+    }*/
 
     private void broadcast(String json) {
         synchronized (broadcastLock) {
@@ -166,7 +167,7 @@ public class WebSocketChatHandler extends TextWebSocketHandler {
         QuitMessage quitMessage = new QuitMessage();
         quitMessage.setName(userName);
 
-        process(quitMessage, session);
+        process(quitMessage);
 
         String json = encoder.encode(quitMessage);
         broadcast(json);
