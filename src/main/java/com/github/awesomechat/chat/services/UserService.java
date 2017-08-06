@@ -22,4 +22,8 @@ public class UserService {
     public boolean isExist(User user) {
         return false;
     }
+
+    public void createUser(User user, String password) {
+
+    }
 }
