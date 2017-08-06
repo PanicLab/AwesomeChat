@@ -16,14 +16,14 @@ public class UserService {
     private UserRepository repository;
 
     public boolean isValid(User user, String password) {
-        return true;
+        return repository.isExist(user) && repository.isPasswordValid(user, password);
     }
 
     public boolean isExist(User user) {
-        return false;
+        return repository.isExist(user);
     }
 
     public void createUser(User user, String password) {
-
+        repository.createUser(user, password);
     }
 }

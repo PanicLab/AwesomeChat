@@ -29,6 +29,7 @@ public class CreateUserController {
         if(userService.isExist(user)) {
             return new ModelAndView("redirect:/error_page");
         }
+
         userService.createUser(user, userPassword);
 
         ModelAndView mav = new ModelAndView("redirect:/chat");
