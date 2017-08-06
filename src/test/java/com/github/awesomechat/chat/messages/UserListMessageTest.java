@@ -1,11 +1,8 @@
 package com.github.awesomechat.chat.messages;
 
-import com.github.awesomechat.chat.Jsonizer;
-import com.github.awesomechat.chat.models.User;
+import com.github.awesomechat.chat.utils.Jsonizer;
 import org.junit.Test;
 
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 

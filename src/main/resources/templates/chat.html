@@ -15,10 +15,7 @@
 
         MessageTypes.JOIN = 1;
         MessageTypes.CHAT = 2;
-        MessageTypes.GETUSERS = 3;
         MessageTypes.USERLIST = 4;
-        MessageTypes.GETMESSAGES = 5;
-        MessageTypes.MESSAGELIST = 6;
         MessageTypes.QUIT = 7;
 
         /* next comments is thymeleaf feature. Do not remove!*/
@@ -52,7 +49,6 @@
         }
 
         function onMessage(message) {
-            //console.log(getTime() + "Message detected: " + message.data );
             var data = JSON.parse(message.data);
             processMessage(data);
         }
@@ -82,7 +78,6 @@
                 chatUsers = message.users;
 
                 for (var x in message.users) {
-                    //console.log(message.users[x]);
                     user = message.users[x];
                     populateUserList(user)
                 }
@@ -106,7 +101,6 @@
             };
             button.style.width = "100%";
             document.getElementById("wrapper").appendChild(button);
-            //console.log("populate " + user);
         }
 
         function printMessage(text) {

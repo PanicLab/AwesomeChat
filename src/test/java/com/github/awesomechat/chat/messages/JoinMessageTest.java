@@ -1,6 +1,6 @@
 package com.github.awesomechat.chat.messages;
 
-import com.github.awesomechat.chat.Jsonizer;
+import com.github.awesomechat.chat.utils.Jsonizer;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

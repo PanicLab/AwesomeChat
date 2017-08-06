@@ -4,10 +4,7 @@ package com.github.awesomechat.chat.messages;
 public class Message {
     public static final int JOIN = 1;
     public static final int CHAT = 2;
-    public static final int GET_USERS = 3;
     public static final int USER_LIST = 4;
-    public static final int CHAT_MESSAGES = 5;
-    public static final int MESSAGE_LIST = 6;
     public static final int QUIT = 7;
 
     private int type;

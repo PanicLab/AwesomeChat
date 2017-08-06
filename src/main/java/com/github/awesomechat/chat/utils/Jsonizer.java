@@ -1,4 +1,4 @@
-package com.github.awesomechat.chat;
+package com.github.awesomechat.chat.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -46,25 +46,12 @@ public class Jsonizer implements JsonEncoder, JsonDecoder{
                     break;
                 }
 
-                case Message.GET_USERS: {
-                    message = mapper.readValue(str, GetUsersMessage.class);
-                    break;
-                }
 
                 case Message.USER_LIST: {
                     message = mapper.readValue(str, UserListMessage.class);
                     break;
                 }
 
-                case Message.CHAT_MESSAGES: {
-                    message = mapper.readValue(str, ChatMessagesMessage.class);
-                    break;
-                }
-
-                case Message.MESSAGE_LIST: {
-                    message = mapper.readValue(str, UserListMessage.class);
-                    break;
-                }
 
                 case Message.QUIT: {
                     message = mapper.readValue(str, QuitMessage.class);
