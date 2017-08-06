@@ -75,6 +75,7 @@
             }
 
             if (message.type === MessageTypes.USERLIST) {
+                clearUserList();
                 users_in_list = message.users;
                 //console.log(users);
 
@@ -87,25 +88,35 @@
             }
 
         }
+        
+        function clearUserList() {
+            var userList = document.getElementById("wrapper");
+            while (userList.firstChild) {
+                userList.removeChild(userList.firstChild);
+            }
+        }
 
         function populateUserList(user) {
             var button = document.createElement("button");
             button.type = button;
-            //button.value = user;
+            button.id = user;
             button.innerHTML = user;
-            button.onclick = setMessageTarget;
-/*            button.style.position = "absolute";
-            button.style.top = "0";
-            button.style.left = "0";*/
+            button.onclick = function () {
+                document.getElementById("message_text").value = user + ", ";
+            };
             button.style.width = "100%";
             document.getElementById("wrapper").appendChild(button);
             console.log("populate " + user);
         }
 
-/*        function UserListMessage(users) {
-            this.type = MessageTypes.USERLIST;
-            this.users = users;
-        }*/
+        function setMessageTarget(userButton) {
+            /*          next comments is thymeleaf feature. Do not remove!*/
+            /*<![CDATA[*/
+            var target = [[${user.fullName}]];
+            /*]]>*/
+            document.getElementById("message_text").value = target + ", ";
+        }
+
 
         function printMessage(text) {
             var textArea = document.getElementById("textarea");
@@ -128,14 +139,6 @@
 
         function onError(error) {
             console.log('Error detected.');
-        }
-
-        function setMessageTarget(userButton) {
-/*          next comments is thymeleaf feature. Do not remove!*/
-            /*<![CDATA[*/
-            var target = [[${user.fullName}]];
-            /*]]>*/
-            document.getElementById("message_text").value = target + ", ";
         }
 
         function sendMessageByEnter(event) {
