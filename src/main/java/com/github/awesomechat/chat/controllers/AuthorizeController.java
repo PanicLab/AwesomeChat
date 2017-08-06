@@ -10,7 +10,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
-import javax.servlet.ServletContextListener;
 import javax.servlet.http.HttpServletRequest;
 
 
@@ -18,11 +17,9 @@ import javax.servlet.http.HttpServletRequest;
 public class AuthorizeController {
 
     private UserService userService;
-    private ServletContextListener cxtListener;
 
     @Autowired
-    AuthorizeController(ServletContextListener listener, UserService service) {
-        cxtListener = listener;
+    AuthorizeController(UserService service) {
         userService = service;
     }
 
@@ -35,12 +32,7 @@ public class AuthorizeController {
         user.setFirstName(userFirstName);
         user.setLastName(userLastName);
         if(userService.isValid(user, userPassword)) {
-/*            attributes.addAttribute("firstName", userFirstName);
-            attributes.addAttribute("lastName", userLastName);*/
             ModelAndView mav = new ModelAndView("redirect:/chat");
-           // mav.addObject("firstName", userFirstName);
-            //mav.addObject("lastName", userLastName);
-            //mav.addObject("user", user);
             attributes.addFlashAttribute("user", user);
             return mav;
         } else {
